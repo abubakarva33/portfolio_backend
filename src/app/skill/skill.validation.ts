@@ -4,7 +4,7 @@ import { z } from "zod";
 const bodySchema = z.object({
    title: z.string(),
     value: z.number(),
-    type: z.string(),
+    type: z.enum(["design", "development", "academic", "programming", "training","job"]),
 });
 
 export const skillCreateZodSchema = z.object({
