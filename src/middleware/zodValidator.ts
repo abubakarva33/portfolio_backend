@@ -4,7 +4,7 @@ import type { ZodObject } from "zod";
 export const zodValidator =
   (validatorZod: ZodObject) => async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await validatorZod.parseAsync(req);
+      await validatorZod.parseAsync(req.body);
 
       return next();
     } catch (error) {
