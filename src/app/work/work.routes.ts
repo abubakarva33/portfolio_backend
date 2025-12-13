@@ -1,10 +1,10 @@
 import { generateCrudRoutes, partialFilterMiddlewares } from "xmcrud";
 import WorkModel from "./work.model";
 import { Router } from "express";
-import { validatorMiddleware } from "../../middleware/zodValidator";
+import { zodValidator } from "../../middleware/zodValidator";
 import { workCreateZodSchema, workUpdateZodSchema } from "./work.validation";
 
-const partialFilterItems = [""]; // only key from model (type: string)
+const partialFilterItems = ["title", "description", "shortDescription", "tags"]; // only key from model (type: string)
 
 const workRouter = Router();
 
@@ -14,8 +14,8 @@ const curdRouter = generateCrudRoutes({
   // ioredis: redis,  // optional if has redis in app
   middlewares: {
     getAll: [partialFilterMiddlewares(partialFilterItems)],
-    create: [validatorMiddleware(workCreateZodSchema)], // middlewares are optional
-    update: [validatorMiddleware(workUpdateZodSchema)], // middlewares are optional
+    create: [zodValidator(workCreateZodSchema)], // middlewares are optional
+    update: [zodValidator(workUpdateZodSchema)], // middlewares are optional
     // removeMany: [],  // middlewares are optional
     // updateMany: [],  // middlewares are optional
     // getSingle: [],  // middlewares are optional

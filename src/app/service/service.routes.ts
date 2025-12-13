@@ -1,22 +1,23 @@
 import { generateCrudRoutes, partialFilterMiddlewares } from "xmcrud";
 import ServiceModel from "./service.model";
-import { Router } from "express"
-
+import { Router } from "express";
+import { zodValidator } from "../../middleware/zodValidator";
+import { serviceCreateZodSchema, serviceUpdateZodSchema } from "./service.validation";
 
 const partialFilterItems = ["title", "description"];
 
-const serviceRouter = Router()
+const serviceRouter = Router();
 
-const curdRouter =  generateCrudRoutes({
+const curdRouter = generateCrudRoutes({
   mongooseModel: ServiceModel,
   name: "service",
   middlewares: {
     getAll: [partialFilterMiddlewares(partialFilterItems)],
-    // create: [],  // middlewares are optional
+    create: [zodValidator(serviceCreateZodSchema)],
+    update: [zodValidator(serviceUpdateZodSchema)],
     // removeMany: [],  // middlewares are optional
     // updateMany: [],  // middlewares are optional
     // getSingle: [],  // middlewares are optional
-    // update: [],  // middlewares are optional
     // remove: [],  // middlewares are optional
   },
 });
@@ -28,9 +29,7 @@ const curdRouter =  generateCrudRoutes({
 //   res.send(data)
 // })
 
-
-
-// must be end of router 
-serviceRouter.use(curdRouter)
+// must be end of router
+serviceRouter.use(curdRouter);
 
 export default serviceRouter;
