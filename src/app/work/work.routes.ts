@@ -1,23 +1,24 @@
 import { generateCrudRoutes, partialFilterMiddlewares } from "xmcrud";
 import WorkModel from "./work.model";
-import { Router } from "express"
-
+import { Router } from "express";
+import { validatorMiddleware } from "../../middleware/zodValidator";
+import { workCreateZodSchema, workUpdateZodSchema } from "./work.validation";
 
 const partialFilterItems = [""]; // only key from model (type: string)
 
-const workRouter = Router()
+const workRouter = Router();
 
-const curdRouter =  generateCrudRoutes({
+const curdRouter = generateCrudRoutes({
   mongooseModel: WorkModel,
-  name: "work",    //! name same as route name
+  name: "work", //! name same as route name
   // ioredis: redis,  // optional if has redis in app
   middlewares: {
     getAll: [partialFilterMiddlewares(partialFilterItems)],
-    // create: [],  // middlewares are optional
+    create: [validatorMiddleware(workCreateZodSchema)], // middlewares are optional
+    update: [validatorMiddleware(workUpdateZodSchema)], // middlewares are optional
     // removeMany: [],  // middlewares are optional
     // updateMany: [],  // middlewares are optional
     // getSingle: [],  // middlewares are optional
-    // update: [],  // middlewares are optional
     // remove: [],  // middlewares are optional
   },
 });
@@ -29,9 +30,7 @@ const curdRouter =  generateCrudRoutes({
 //   res.send(data)
 // })
 
-
-
-// must be end of router 
-workRouter.use(curdRouter)
+// must be end of router
+workRouter.use(curdRouter);
 
 export default workRouter;
