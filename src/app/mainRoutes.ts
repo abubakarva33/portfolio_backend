@@ -3,6 +3,7 @@ import serviceRouter from "./service/service.routes";
 import workRouter from "./work/work.routes";
 import skillRouter from "./skill/skill.routes";
 import educationRouter from "./education/education.routes";
+import { uploadCloudinary } from "../utils/uploadToCloudinary";
 
 const router = Router();
 
@@ -20,5 +21,26 @@ const moduleRoute = [
 moduleRoute.forEach((route) =>
   route.auth ? router.use(route.path, route.routes) : router.use(route.path, route.routes)
 );
+
+// image upload
+router.post("/upload", uploadCloudinary.single("photo"), (req, res, next) => {
+  try {
+    const data = {
+      uid: req.file?.filename,
+      name: req.file?.filename.split("/").pop() + ".webp",
+      url: req.file?.path,
+      size: req.file?.size,
+    };
+
+    res.send({
+      success: true,
+      message: "File uploaded successfully",
+      data,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
 
 export default router;
