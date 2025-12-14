@@ -7,13 +7,8 @@ const SkillSchema: Schema = new Schema<ISkill>(
     value: Number,
     type: {
       type: String,
-      enum: ["design", "development", "academic", "programming", "training", "job"],
+      enum: ["design", "development"],
     },
-    details: String,
-    endYear: Number,
-    institute: String,
-    location: String,
-    startYear: Number,
   },
   { timestamps: true }
 );

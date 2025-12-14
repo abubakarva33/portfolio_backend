@@ -4,14 +4,13 @@ import { Router } from "express";
 import { zodValidator } from "../../middleware/zodValidator";
 import { skillCreateZodSchema, skillUpdateZodSchema } from "./skill.validation";
 
-const partialFilterItems = ["title"]; // only key from model (type: string)
+const partialFilterItems = ["title"];
 
 const skillRouter = Router();
 
 const curdRouter = generateCrudRoutes({
   mongooseModel: SkillModel,
   name: "skill", //! name same as route name
-  // ioredis: redis,  // optional if has redis in app
   middlewares: {
     getAll: [partialFilterMiddlewares(partialFilterItems)],
     create: [zodValidator(skillCreateZodSchema)],
